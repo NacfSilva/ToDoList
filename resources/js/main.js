@@ -138,7 +138,12 @@ function editItem() {
    
   } else {
     inputs.value = item.innerText;
+    item.innerText = '';
     item.appendChild(inputs);
+    buttons.appendChild(remove);
+    buttons.appendChild(edit);
+    buttons.appendChild(complete);
+    item.appendChild(buttons);
     
   }
 
