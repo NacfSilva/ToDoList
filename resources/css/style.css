@@ -211,8 +211,8 @@ ul.todo#completed li .buttons button.complete svg .fill {
 }
 
   ul.todo li input {
-    margin-right:1px;
-    width:80%
+    margin-right:2px;
+    width:75%
   }
 
 ul.todo li .buttons button svg .fill {
