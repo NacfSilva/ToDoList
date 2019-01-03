@@ -156,7 +156,7 @@ ul.todo li .buttons button {
   -moz-appearance: none;
 }
 
-ul.todo li .buttons button:before {
+ul.todo li .buttons button.edit:before {
   content: '';
   width: 1px;
   height: 30px;
@@ -167,14 +167,22 @@ ul.todo li .buttons button:before {
   left: 0;
 }
 
+  ul.todo li .buttons button.complete:before {
+    content: '';
+    width: 1px;
+    height: 30px;
+    background: #edf0f1;
+    position: absolute;
+    top: 10px;
+    left: 0;
+  }
+
 ul.todo li .buttons button svg {
   width: 22px;
   height: 22px;
-
   position: absolute;
   top: 50%;
   left: 50%;
-
   margin: -11px 0 0 -11px;
 }
  
