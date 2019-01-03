@@ -156,7 +156,7 @@ ul.todo li .buttons button {
   -moz-appearance: none;
 }
 
-ul.todo li .buttons button:last-of-type:before {
+ul.todo li .buttons button:before {
   content: '';
   width: 1px;
   height: 30px;
