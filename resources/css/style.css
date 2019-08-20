@@ -261,16 +261,79 @@ ul.todo#todo:empty:after {
   content: 'You have nothing to-do!';
   margin: 15px 0 0 0;
 }
+ul.todo#noteList:empty:after {
+  content: 'Save here!';
+  margin: 15px 0 0 0;
+}
 
 ul.todo#completed:empty:after {
   content: 'You have yet to complete any tasks.';
 }
 
 ul.todo#todo:after,
-ul.todo#completed:after {
+ul.todo#completed:after,
+ul.todo#noteList:after
+{
   width: 100%;
   display: block;
   text-align: center;
   font-size: 12px;
   color: #aaa;
+}
+
+/* index html*/
+
+.list-option{
+    border: 1px lightgray solid;
+    width:100%;
+    height: 60px;
+    background-color: white!important;
+    
+    font-size: 20px;
+    text-align: center;
+    padding: 10px;
+    
+    
+}
+.list-option:hover{
+    
+    
+    background-color: rgb(245,255,245)!important;
+}
+
+
+.text-green{
+    font-size: 20px;
+    color:#25b99a!important;
+}
+
+.text-green:hover{
+    color:green!important;
+}
+
+.text-green-active{
+    
+    font-size: 20px;
+    color:darkgreen!important;
+}
+.text-green-active:hover{
+    color:#25b99a!important;
+}
+
+.border-green{
+  border-bottom: 3px #25b99a solid; 
+}
+
+logo{
+    
+    font-size: 20px;
+}
+
+logo span{
+    color: #25b99a
+}
+.nav{
+    position:fixed;
+    top:0;
+    width: 100%;
 }
