@@ -1,199 +1,126 @@
-
-var data = (localStorage.getItem('groceryList')) ? JSON.parse(localStorage.getItem('groceryList')):{
-  groceryList: [],
-  completed: []
-};
-
-// Remove and complete icons in SVG format
-var removeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect class="noFill" width="22" height="22"/><g><g><path class="fill" d="M16.1,3.6h-1.9V3.3c0-1.3-1-2.3-2.3-2.3h-1.7C8.9,1,7.8,2,7.8,3.3v0.2H5.9c-1.3,0-2.3,1-2.3,2.3v1.3c0,0.5,0.4,0.9,0.9,1v10.5c0,1.3,1,2.3,2.3,2.3h8.5c1.3,0,2.3-1,2.3-2.3V8.2c0.5-0.1,0.9-0.5,0.9-1V5.9C18.4,4.6,17.4,3.6,16.1,3.6z M9.1,3.3c0-0.6,0.5-1.1,1.1-1.1h1.7c0.6,0,1.1,0.5,1.1,1.1v0.2H9.1V3.3z M16.3,18.7c0,0.6-0.5,1.1-1.1,1.1H6.7c-0.6,0-1.1-0.5-1.1-1.1V8.2h10.6V18.7z M17.2,7H4.8V5.9c0-0.6,0.5-1.1,1.1-1.1h10.2c0.6,0,1.1,0.5,1.1,1.1V7z"/></g><g><g><path class="fill" d="M11,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6s0.6,0.3,0.6,0.6v6.8C11.6,17.7,11.4,18,11,18z"/></g><g><path class="fill" d="M8,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C8.7,17.7,8.4,18,8,18z"/></g><g><path class="fill" d="M14,18c-0.4,0-0.6-0.3-0.6-0.6v-6.8c0-0.4,0.3-0.6,0.6-0.6c0.4,0,0.6,0.3,0.6,0.6v6.8C14.6,17.7,14.3,18,14,18z"/></g></g></g></svg>';
-var completeSVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve"><rect y="0" class="noFill" width="22" height="22"/><g><path class="fill" d="M9.7,14.4L9.7,14.4c-0.2,0-0.4-0.1-0.5-0.2l-2.7-2.7c-0.3-0.3-0.3-0.8,0-1.1s0.8-0.3,1.1,0l2.1,2.1l4.8-4.8c0.3-0.3,0.8-0.3,1.1,0s0.3,0.8,0,1.1l-5.3,5.3C10.1,14.3,9.9,14.4,9.7,14.4z"/></g></svg>';
-var editSVG = '<svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="22px" height="22px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><path class="fill" d="M968.161,31.839c36.456,36.456,36.396,95.547,0,132.003l-43.991,43.991L792.138,75.83l43.991-43.991C872.583-4.586,931.704-4.617,968.161,31.839z M308.238,559.79l-43.96,175.963l175.963-43.991l439.938-439.938L748.147,119.821L308.238,559.79z M746.627,473.387v402.175H124.438V253.373h402.204l124.407-124.438H0V1000h871.064V348.918L746.627,473.387z" /></svg>';
-
-//<svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="22px" height="22px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><path d="M968.161,31.839c36.456,36.456,36.396,95.547,0,132.003l-43.991,43.991L792.138,75.83l43.991-43.991C872.583-4.586,931.704-4.617,968.161,31.839z M308.238,559.79l-43.96,175.963l175.963-43.991l439.938-439.938L748.147,119.821L308.238,559.79z M746.627,473.387v402.175H124.438V253.373h402.204l124.407-124.438H0V1000h871.064V348.918L746.627,473.387z" /></svg>
-rendergroceryList();
-
-// User clicked on the add button
-// If there is any text inside the item field, add that text to the todo list
-document.getElementById('add').addEventListener('click', function() {
-  var value = document.getElementById('item').value;
-  var numb3r = document.getElementById('numb3r').value;
-  if (value && numb3r) {
-    addItem(value,numb3r);
-  }
-});
-
-document.getElementById('item').addEventListener('keydown', function (e) {
-  var value = this.value;
-  if ((e.code === 'Enter' || e.code === 'NumpadEnter') && value && numb3r) {
-    addItem(value,numb3r);
-  }
-});
-
-function addItem (value,numb3r) {
-  addItemToDOM(value,numb3r);
-  document.getElementById('item').value = '';
-  document.getElementById('numb3r').value = '';
-
-  data.groceryList.push(value,numb3r);
-  dataObjectUpdated();
-}
-
-function rendergroceryList() {
-  if (!data.groceryList.length && !data.completed.length) return;
-
-  for (var i = 0; i < data.groceryList.length; i++) {
-    var value = data.groceryList[i];
-    addItemToDOM(value);
-  }
-
-  for (var j = 0; j < data.completed.length; j++) {
-    var value = data.completed[j];
-    addItemToDOM(value, true);
+// Book Class: Represents a Book
+class Book {
+  constructor(title, author) {
+    this.title = title;
+    this.author = author;
   }
 }
 
-function dataObjectUpdated() {
-  localStorage.setItem('groceryList', JSON.stringify(data));
-}
+// UI Class: Handle UI Tasks
+class UI {
+  static displayBooks() {
+    const books = Store.getBooks();
 
-//aqui
-
-function removeItem() {
-  var item = this.parentNode.parentNode;
-  var parent = item.parentNode;
-  var id = parent.id;
-  var value = item.innerText;
-
-  if (id === 'groceryList') {
-    data.groceryList.splice(data.groceryList.indexOf(value), 1);
-  } else {
-    data.completed.splice(data.completed.indexOf(value), 1);
-  }
-  dataObjectUpdated();
-
-  parent.removeChild(item);
-}
-
-
-
-function completeItem() {
-  var item = this.parentNode.parentNode;
-    
-  var parent = item.parentNode;
-  var id = parent.id;
-  var value = item.innerText;
-
-  if (id === 'groceryList') {
-    data.groceryList.splice(data.groceryList.indexOf(value), 1);
-    data.completed.push(value);
-  } else {
-    data.completed.splice(data.completed.indexOf(value), 1);
-    data.groceryList.push(value);
-  }
-  dataObjectUpdated();
-
-  // Check if the item should be added to the completed list or to re-added to the todo list
-  var target = (id === 'groceryList') ? document.getElementById('completed'):document.getElementById('groceryList');
-
-  parent.removeChild(item);
-  target.insertBefore(item, numb3r, target.childNodes[0]);
-}
-
-function editItem() {
-  var item = this.parentNode.parentNode;
-  var parent = item.parentNode;
-  var id = parent.id;
-  var value = item.innerText;
-  
-
-  var inputs = document.createElement('input');
-  inputs.setAttribute("type", "text");
-  
-
-  var buttons = document.createElement('div');
-  buttons.classList.add('buttons');
-
-  var remove = document.createElement('button');
-  remove.classList.add('remove');
-  remove.innerHTML = removeSVG;
-
-  var complete = document.createElement('button');
-  complete.classList.add('complete');
-  complete.innerHTML = completeSVG;
-
-  var edit = document.createElement('button');
-  edit.classList.add('edit');
-  edit.innerHTML = editSVG;
-  remove.addEventListener('click', removeItem);
-  edit.addEventListener('click', editItem);
-  complete.addEventListener('click', completeItem);
-
-
-  //Look for a input in the li, if dont, create one
-  //If class of the parent is .editmode
-  if (item.querySelector('input[type=text]')) {
-    var editInput = item.querySelector('input[type=text]');
-    //switch to .editmode
-    //label becomes the inputs value.
-    item.innerText = editInput.value;
-    buttons.appendChild(remove);
-    buttons.appendChild(edit);
-    buttons.appendChild(complete);
-    item.appendChild(buttons);
-   
-  } else {
-    inputs.value = item.innerText;
-    item.innerText = '';
-    item.appendChild(inputs);
-    buttons.appendChild(remove);
-    buttons.appendChild(edit);
-    buttons.appendChild(complete);
-    item.appendChild(buttons);
-    
+    books.forEach((book) => UI.addBookToList(book));
   }
 
-  dataObjectUpdated();
+  static addBookToList(book) {
+    const list = document.querySelector('#book-list');
+
+    const row = document.createElement('tr');
+
+    row.innerHTML = `
+      <td>${book.title}</td>
+      <td>${book.author}</td>
+      <td><a href="#" class="btn btn-danger btn-sm delete">X</a></td>
+    `;
+
+    list.appendChild(row);
+  }
+
+  static deleteBook(el) {
+    if(el.classList.contains('delete')) {
+      el.parentElement.parentElement.remove();
+    }
+  }
+
+  static showAlert(message, className) {
+    const div = document.createElement('div');
+    div.className = `alert alert-${className}`;
+    div.appendChild(document.createTextNode(message));
+    const container = document.querySelector('.container');
+    const form = document.querySelector('#book-form');
+    container.insertBefore(div, form);
+
+    // Vanish in 3 seconds
+    setTimeout(() => document.querySelector('.alert').remove(), 3000);
+  }
+
+  static clearFields() {
+    document.querySelector('#title').value = '';
+    document.querySelector('#author').value = '';
+  }
 }
 
+// Store Class: Handles Storage
+class Store {
+  static getBooks() {
+    let books;
+    if(localStorage.getItem('books') === null) {
+      books = [];
+    } else {
+      books = JSON.parse(localStorage.getItem('books'));
+    }
 
-  // Check if the item should be added to the completed list or to re-added to the todo list
+    return books;
+  }
 
-// Adds a new item to the todo list
-function addItemToDOM(text,numb3r, completed) {
-  var list = (completed) ? document.getElementById('completed'):document.getElementById('groceryList');
+  static addBook(book) {
+    const books = Store.getBooks();
+    books.push(book);
+    localStorage.setItem('books', JSON.stringify(books));
+  }
 
-  var item = document.createElement('li');
-  item.classList.add("editMode");
-  item.innerText = text;
+  static removeBook(isbn) {
+    const books = this.parent;
 
-
-  var buttons = document.createElement('div');
-  buttons.classList.add('buttons');
-
-  var remove = document.createElement('button');
-  remove.classList.add('remove');
-  remove.innerHTML = removeSVG;
-
-
-  var edit = document.createElement('button');
-  edit.classList.add('edit');
-  edit.innerHTML = editSVG;
-
-  // Add click event for removing the item
-  remove.addEventListener('click', removeItem);
-  edit.addEventListener('click', editItem);
-  var complete = document.createElement('button');
-  complete.classList.add('complete');
-  complete.innerHTML = completeSVG;
-
-  // Add click event for completing the item
-  complete.addEventListener('click', completeItem);
-
-
-  buttons.appendChild(remove);
-  buttons.appendChild(edit);
-  buttons.appendChild(complete);
-  item.appendChild(buttons);
  
-  list.insertBefore(item,numb3r, list.childNodes[0]);
+
+    localStorage.setItem('books', JSON.stringify(books));
+  }
 }
+
+// Event: Display Books
+document.addEventListener('DOMContentLoaded', UI.displayBooks);
+
+// Event: Add a Book
+document.querySelector('#book-form').addEventListener('submit', (e) => {
+  // Prevent actual submit
+  e.preventDefault();
+
+  // Get form values
+  const title = document.querySelector('#title').value;
+  const author = document.querySelector('#author').value;
+
+  // Validate
+  if(title === '' || author === '' ) {
+    UI.showAlert('Please fill in all fields', 'danger');
+  } else {
+    // Instatiate book
+    const book = new Book(title, author);
+
+    // Add Book to UI
+    UI.addBookToList(book);
+
+    // Add book to store
+    Store.addBook(book);
+
+    // Show success message
+    UI.showAlert('Book Added', 'success');
+
+    // Clear fields
+    UI.clearFields();
+  }
+});
+
+// Event: Remove a Book
+document.querySelector('#book-list').addEventListener('click', (e) => {
+  // Remove book from UI
+  UI.deleteBook(e.target);
+
+  // Remove book from store
+  Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
+
+  // Show success message
+  UI.showAlert('Book Removed', 'success');
+});
